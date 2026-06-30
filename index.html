@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stick Platforms - Geometry Dash Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            bg: '#1E293B',
+                            primary: '#06B6D4',
+                            secondary: '#A855F7',
+                            accent: '#F97316',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #1E293B;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1E293B; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #A855F7; 
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06B6D4; 
+        }
+        
+        /* Game Canvas specific styles */
+        #gameCanvas {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            background-color: #0f172a;
+            image-rendering: pixelated;
+        }
+        
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #06B6D4;
+        }
+    </style>
+</head>
+<body class="antialiased font-sans">
+
+    <nav class="fixed w-full z-50 bg-brand-bg/90 backdrop-blur-md border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-10 h-10 bg-brand-primary rounded-lg flex items-center justify-center font-bold text-xl mr-2 shadow-[0_0_15px_rgba(6,182,212,0.5)]">SP</div>
+                    <span class="font-bold text-xl tracking-wider text-white">STICK PLATFORMS</span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="nav-link text-gray-300 font-medium">Home</a>
+                    <a href="#about" class="nav-link text-gray-300 font-medium">About Game</a>
+                    <a href="#register" class="nav-link text-gray-300 font-medium">Registration</a>
+                    <a href="#game" class="nav-link text-brand-primary font-bold">Play Game</a>
+                    <a href="#reviews" class="nav-link text-gray-300 font-medium">Reviews</a>
+                    <a href="#contact" class="nav-link text-gray-300 font-medium">Contact Us</a>
+                    <a href="#register" class="bg-brand-secondary hover:bg-brand-secondary/80 text-white px-6 py-2 rounded-full font-semibold transition-all transform hover:scale-105 shadow-lg">Sign Up</a>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-bg pb-4 px-4">
+            <a href="#home" class="block py-2 text-gray-300">Home</a>
+            <a href="#about" class="block py-2 text-gray-300">About Game</a>
+            <a href="#register" class="block py-2 text-gray-300">Registration</a>
+            <a href="#game" class="block py-2 text-brand-primary font-bold">Play Game</a>
+            <a href="#reviews" class="block py-2 text-gray-300">Reviews</a>
+            <a href="#contact" class="block py-2 text-gray-300">Contact Us</a>
+        </div>
+    </nav>
+
+    <section id="home" class="pt-32 pb-20 lg:pt-48 lg:pb-32 px-4 relative overflow-hidden">
+        <!-- Decorative background elements -->
+        <div class="absolute top-20 left-10 w-32 h-32 bg-brand-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+        <div class="absolute bottom-10 right-10 w-40 h-40 bg-brand-secondary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 2s;"></div>
+        
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <p class="text-brand-accent font-semibold tracking-widest uppercase mb-4">Jump, Fly, and Create</p>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight">
+                Master the rhythm in <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-secondary">Stick Platforms</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Experience the energetic and competitive Geometry Dash inspired platformer. Jump through dangerous passages, enjoy a 5-level demo, and prepare to build your own custom maps!
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <a href="#game" class="bg-brand-primary hover:bg-brand-primary/80 text-white font-bold py-4 px-8 rounded-lg shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all transform hover:-translate-y-1 text-lg">
+                    Play Demo Now
+                </a>
+                <a href="#about" class="bg-transparent border-2 border-gray-500 hover:border-gray-300 text-gray-300 hover:text-white font-bold py-4 px-8 rounded-lg transition-all text-lg">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <!-- Left Column (Text) -->
+                <div class="lg:w-1/2">
+                    <p class="text-brand-secondary font-semibold tracking-wider uppercase mb-2">Features</p>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Freedom to make unique maps to play</h2>
+                    <p class="text-gray-400 text-lg leading-relaxed mb-6">
+                        Stick Platforms is more than just a game; it's a creative platform. Designed for kids 13+ and platformer enthusiasts, we bring the energetic, competitive mood of Geometry Dash right to your browser.
+                    </p>
+                    <p class="text-gray-400 text-lg leading-relaxed">
+                        Test your skills on our 5-level demo, memorize the fast-paced patterns, and prepare for our upcoming map creator tool where you can share your challenges with the world.
+                    </p>
+                </div>
+                <!-- Right Column (List items based on wireframe) -->
+                <div class="lg:w-1/2 space-y-8">
+                    <!-- Feature 1 -->
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mr-6 border border-gray-700 text-brand-primary">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">5-Level Demo Game</h3>
+                            <p class="text-gray-400">Jump right into the action with our carefully crafted 5 levels, designed to test your timing and reflexes.</p>
+                        </div>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mr-6 border border-gray-700 text-brand-secondary">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Custom Map Creation</h3>
+                            <p class="text-gray-400">Unleash your creativity. Build, test, and share your unique geometric obstacle courses.</p>
+                        </div>
+                    </div>
+                    <!-- Feature 3 -->
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mr-6 border border-gray-700 text-brand-accent">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Energetic & Competitive</h3>
+                            <p class="text-gray-400">Compete with friends, track your attempts, and master the rhythm of the jumping blocks.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="register" class="py-20">
+        <div class="max-w-md mx-auto bg-gray-800/80 p-8 rounded-2xl shadow-2xl border border-gray-700 backdrop-blur-sm">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold mb-2">Sign up form</h2>
+                <p class="text-gray-400 text-sm">Create an account to save your maps (Coming soon)</p>
+            </div>
+            
+            <form onsubmit="event.preventDefault(); showMessage('Account creation demo successful!');" class="space-y-5">
+                <div>
+                    <input type="text" placeholder="Username" required class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-colors">
+                </div>
+                <div>
+                    <input type="email" placeholder="Email" required class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-colors">
+                </div>
+                <div class="relative">
+                    <input type="password" placeholder="Password" required class="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-colors">
+                    <button type="button" class="absolute right-3 top-3 text-gray-400 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </button>
+                </div>
+                
+                <button type="submit" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg transition-colors border border-gray-500 hover:border-gray-400">
+                    Sign up
+                </button>
+                
+                <p class="text-center text-xs text-gray-500 mt-4">
+                    By signing up, you agree to our Terms of Service<br>and Privacy Policy.
+                </p>
+            </form>
+            <!-- Custom Message Box for form -->
+            <div id="formMessage" class="hidden mt-4 p-3 bg-green-500/20 border border-green-500 text-green-400 rounded text-center text-sm"></div>
+        </div>
+    </section>
+
+    <section id="game" class="py-20 bg-slate-900 border-y border-gray-700">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4">Geometry Dash Game Demo</h2>
+            <p class="text-gray-400 mb-8 max-w-2xl mx-auto">Click, Tap, or press Space to jump. Avoid the red spikes and crash into the walls of blocks! Complete all 5 levels.</p>
+            
+            <div class="relative w-full max-w-4xl mx-auto aspect-video rounded-xl overflow-hidden shadow-2xl border-4 border-gray-800">
+                <!-- HTML5 Canvas for the Game -->
+                <canvas id="gameCanvas" class="w-full h-full block bg-[#0f172a]"></canvas>
+                
+                <!-- Game Overlays (Main Menu, Game Over, Victory) -->
+                <div id="gameUI" class="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-10 transition-opacity">
+                    <h1 id="uiTitle" class="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-brand-primary to-blue-600 mb-4 drop-shadow-lg">STICK PLATFORMS</h1>
+                    <p id="uiSubtitle" class="text-xl text-gray-200 mb-8">Level 1 - Getting Started</p>
+                    <button id="uiBtn" class="bg-brand-primary hover:bg-brand-primary/80 text-white font-bold py-3 px-10 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.6)] transition-all transform hover:scale-105 text-xl border-2 border-cyan-300">
+                        START GAME
+                    </button>
+                    <p class="mt-6 text-gray-400 text-sm">Press Spacebar or Click to jump</p>
+                </div>
+                
+                <!-- In-Game HUD -->
+                <div id="gameHUD" class="absolute top-4 left-4 right-4 flex justify-between items-start pointer-events-none hidden">
+                    <div class="text-left drop-shadow-md">
+                        <div class="text-white font-bold text-xl" id="hudLevel">Level 1</div>
+                        <div class="text-gray-300 text-sm">Attempts: <span id="hudAttempts">1</span></div>
+                    </div>
+                    <!-- Progress bar -->
+                    <div class="w-1/2 max-w-xs bg-gray-800 rounded-full h-3 mt-2 border border-gray-600 overflow-hidden">
+                        <div id="hudProgress" class="bg-brand-secondary h-full rounded-full w-0 transition-all duration-100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-24 bg-brand-bg relative">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            
+            <div class="flex justify-center mb-8">
+                <!-- Avatar placeholder -->
+                <div class="w-20 h-20 bg-gray-700 rounded-full border-4 border-brand-primary overflow-hidden flex items-center justify-center">
+                    <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                </div>
+            </div>
+            
+            <div class="relative">
+                <!-- Left Arrow -->
+                <button class="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 md:-ml-12 text-gray-500 hover:text-brand-primary transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                
+                <p class="text-xl md:text-2xl text-gray-300 italic px-8 md:px-16 leading-relaxed mb-8">
+                    "The demo levels are incredibly addictive! I love the smooth jumping mechanics. Can't wait for the custom map creator to be released so I can challenge my friends."
+                </p>
+                
+                <!-- Right Arrow -->
+                <button class="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 md:-mr-12 text-gray-500 hover:text-brand-primary transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+            
+            <div class="mt-4">
+                <h4 class="font-bold text-white text-lg">Alex Mercer</h4>
+                <p class="text-gray-500 text-sm">Beta Tester</p>
+            </div>
+            
+            <!-- Carousel dots -->
+            <div class="flex justify-center space-x-2 mt-8">
+                <div class="w-3 h-3 bg-brand-primary rounded-full"></div>
+                <div class="w-3 h-3 bg-gray-600 rounded-full"></div>
+                <div class="w-3 h-3 bg-gray-600 rounded-full"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="bg-gray-900 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <div class="w-8 h-8 bg-brand-primary rounded-md flex items-center justify-center font-bold text-sm mr-2 text-white">SP</div>
+                <span class="font-bold text-lg text-white tracking-wider">Stick Platforms</span>
+            </div>
+            <div class="text-gray-400 text-sm text-center md:text-left mb-4 md:mb-0">
+                &copy; 2026 Alexander. Based on web design document. All rights reserved.
+            </div>
+            <div class="flex space-x-4">
+                <a href="#" class="text-gray-400 hover:text-brand-primary"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+                <a href="#" class="text-gray-400 hover:text-brand-secondary"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Form message handler (no alerts)
+        function showMessage(msg) {
+            const msgBox = document.getElementById('formMessage');
+            msgBox.textContent = msg;
+            msgBox.classList.remove('hidden');
+            setTimeout(() => {
+                msgBox.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+
+    <script>
+        /**
+         * STICK PLATFORMS - Geometry Dash Style Game Engine
+         * Built in Vanilla JS for HTML5 Canvas
+         */
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const gameUI = document.getElementById('gameUI');
+        const uiTitle = document.getElementById('uiTitle');
+        const uiSubtitle = document.getElementById('uiSubtitle');
+        const uiBtn = document.getElementById('uiBtn');
+        const gameHUD = document.getElementById('gameHUD');
+        const hudLevel = document.getElementById('hudLevel');
+        const hudAttempts = document.getElementById('hudAttempts');
+        const hudProgress = document.getElementById('hudProgress');
+
+        // Internal resolution for consistent physics
+        const GAME_WIDTH = 800;
+        const GAME_HEIGHT = 450;
+        canvas.width = GAME_WIDTH;
+        canvas.height = GAME_HEIGHT;
+
+        // Game States
+        const STATE_MENU = 0;
+        const STATE_PLAYING = 1;
+        const STATE_GAMEOVER = 2;
+        const STATE_VICTORY = 3;
+        
+        let currentState = STATE_MENU;
+        let animationFrameId;
+        
+        // Colors
+        const COLOR_BG = '#0f172a'; // slate 900
+        const COLOR_PLAYER = '#06B6D4'; // cyan
+        const COLOR_SPIKE = '#F97316'; // orange/red tone for danger
+        const COLOR_BLOCK = '#A855F7'; // purple
+        const COLOR_GROUND = '#1E293B'; // slate 800
+        const COLOR_GRID = '#334155'; // slate 700
+        
+        // Physics & Engine config
+        const GRAVITY = 0.8;
+        const JUMP_FORCE = -11.5;
+        const SCROLL_SPEED = 6.5; 
+        const GROUND_HEIGHT = 50;
+        const FLOOR_Y = GAME_HEIGHT - GROUND_HEIGHT;
+
+        /* 
+         * Object types: 
+         * 0 = Spike (Triangle, kills player)
+         * 1 = Block (Square, kills on side hit, safe to land on)
+         */
+        const levels = [
+            // Level 1: Basic Jumps
+            {
+                name: "Level 1 - Getting Started",
+                length: 2500,
+                objects: [
+                    { x: 800, y: FLOOR_Y, type: 0 },
+                    { x: 1200, y: FLOOR_Y, type: 0 },
+                    { x: 1600, y: FLOOR_Y, type: 0 },
+                    { x: 1640, y: FLOOR_Y, type: 0 }
+                ]
+            },
+            // Level 2: Block Platforms
+            {
+                name: "Level 2 - Up and Over",
+                length: 3000,
+                objects: [
+                    { x: 600, y: FLOOR_Y, type: 1 },
+                    { x: 900, y: FLOOR_Y, type: 0 },
+                    { x: 1200, y: FLOOR_Y - 40, type: 1 },
+                    { x: 1240, y: FLOOR_Y - 40, type: 1 },
+                    { x: 1600, y: FLOOR_Y, type: 0 },
+                    { x: 1640, y: FLOOR_Y, type: 0 },
+                    { x: 1680, y: FLOOR_Y, type: 0 }
+                ]
+            },
+            // Level 3: Timing is Key
+            {
+                name: "Level 3 - Timing is Key",
+                length: 3500,
+                objects: [
+                    { x: 600, y: FLOOR_Y, type: 0 },
+                    { x: 800, y: FLOOR_Y, type: 1 },
+                    { x: 800, y: FLOOR_Y - 40, type: 0 }, // Spike on block
+                    { x: 1200, y: FLOOR_Y, type: 0 },
+                    { x: 1240, y: FLOOR_Y, type: 0 },
+                    { x: 1500, y: FLOOR_Y - 60, type: 1 }, // Floating block
+                    { x: 1540, y: FLOOR_Y - 60, type: 1 },
+                    { x: 1800, y: FLOOR_Y, type: 0 },
+                    { x: 2100, y: FLOOR_Y, type: 1 },
+                    { x: 2100, y: FLOOR_Y - 40, type: 1 },
+                ]
+            },
+            // Level 4: The Staircase
+            {
+                name: "Level 4 - The Staircase",
+                length: 4000,
+                objects: [
+                    { x: 700, y: FLOOR_Y, type: 1 },
+                    { x: 740, y: FLOOR_Y, type: 1 },
+                    { x: 740, y: FLOOR_Y - 40, type: 1 },
+                    { x: 1100, y: FLOOR_Y, type: 0 },
+                    { x: 1400, y: FLOOR_Y, type: 1 },
+                    { x: 1550, y: FLOOR_Y, type: 0 },
+                    { x: 1590, y: FLOOR_Y, type: 0 },
+                    { x: 1800, y: FLOOR_Y - 80, type: 1 },
+                    { x: 1840, y: FLOOR_Y - 80, type: 1 },
+                    { x: 2200, y: FLOOR_Y, type: 0 },
+                    { x: 2240, y: FLOOR_Y, type: 0 },
+                    { x: 2280, y: FLOOR_Y, type: 0 }
+                ]
+            },
+            // Level 5: Stick Master
+            {
+                name: "Level 5 - Stick Master",
+                length: 5000,
+                objects: [
+                    { x: 600, y: FLOOR_Y, type: 0 },
+                    { x: 900, y: FLOOR_Y - 40, type: 1 },
+                    { x: 1200, y: FLOOR_Y - 80, type: 1 },
+                    { x: 1500, y: FLOOR_Y, type: 0 },
+                    { x: 1540, y: FLOOR_Y, type: 0 },
+                    { x: 1900, y: FLOOR_Y, type: 1 },
+                    { x: 1900, y: FLOOR_Y - 40, type: 1 },
+                    { x: 1940, y: FLOOR_Y, type: 1 },
+                    { x: 1940, y: FLOOR_Y - 40, type: 1 },
+                    { x: 1980, y: FLOOR_Y, type: 0 }, // Spike immediately after pillar
+                    { x: 2400, y: FLOOR_Y - 60, type: 1 },
+                    { x: 2700, y: FLOOR_Y, type: 0 },
+                    { x: 2740, y: FLOOR_Y, type: 0 },
+                    { x: 2780, y: FLOOR_Y, type: 0 },
+                    { x: 3100, y: FLOOR_Y, type: 1 },
+                    { x: 3100, y: FLOOR_Y - 40, type: 0 },
+                    { x: 3400, y: FLOOR_Y, type: 0 }
+                ]
+            }
+        ];
+
+        let currentLevelIdx = 0;
+        let attempts = 1;
+        let cameraX = 0;
+        let particles = [];
+
+        // Base class size for objects
+        const TILE_SIZE = 40;
+
+        const player = {
+            x: 150, // Fixed horizontal position relative to screen
+            y: FLOOR_Y - TILE_SIZE,
+            width: TILE_SIZE * 0.8,
+            height: TILE_SIZE * 0.8,
+            vy: 0,
+            rotation: 0,
+            isGrounded: true,
+            
+            reset() {
+                this.y = FLOOR_Y - this.height;
+                this.vy = 0;
+                this.rotation = 0;
+                this.isGrounded = true;
+            },
+            
+            jump() {
+                if (this.isGrounded) {
+                    this.vy = JUMP_FORCE;
+                    this.isGrounded = false;
+                }
+            },
+            
+            update() {
+                // Apply Gravity
+                this.vy += GRAVITY;
+                let nextY = this.y + this.vy;
+                this.isGrounded = false; // assume falling until collision
+
+                // Check collisions with active level objects
+                let level = levels[currentLevelIdx];
+                let hitBlock = false;
+                let groundLevel = FLOOR_Y;
+
+                // We only need to check objects that are near the player
+                for (let obj of level.objects) {
+                    // Calculate object position relative to camera
+                    let objScreenX = obj.x - cameraX;
+                    
+                    // Skip if object is far away
+                    if (objScreenX > GAME_WIDTH || objScreenX < -TILE_SIZE) continue;
+
+                    // AABB Collision bounds for player and object
+                    let pL = this.x;
+                    let pR = this.x + this.width;
+                    let pT = nextY;
+                    let pB = nextY + this.height;
+                    
+                    let oL = objScreenX;
+                    let oR = objScreenX + TILE_SIZE;
+                    let oT = obj.y - TILE_SIZE; // objects defined by bottom Y
+                    let oB = obj.y;
+
+                    // Check Overlap
+                    if (pR > oL && pL < oR && pB > oT && pT < oB) {
+                        
+                        if (obj.type === 0) {
+                            // Hit a spike - need smaller hitbox for fairness
+                            let shrink = 10;
+                            if (pR - shrink > oL && pL + shrink < oR && pB > oT + shrink) {
+                                die();
+                                return;
+                            }
+                        } 
+                        else if (obj.type === 1) {
+                            // Hit a block
+                            // Did we land on top? (Previous bottom was above block top)
+                            let prevB = this.y + this.height;
+                            if (prevB <= oT + 5 && this.vy >= 0) {
+                                // Landed on block
+                                groundLevel = oT;
+                                hitBlock = true;
+                            } else {
+                                // Hit side of block
+                                die();
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                // Apply ground check
+                if (nextY + this.height >= groundLevel) {
+                    this.y = groundLevel - this.height;
+                    this.vy = 0;
+                    this.isGrounded = true;
+                    // Snap rotation to nearest 90 degrees when grounded
+                    this.rotation = Math.round(this.rotation / (Math.PI/2)) * (Math.PI/2);
+                } else {
+                    this.y = nextY;
+                    // Rotate while in air
+                    this.rotation += 0.15;
+                }
+            },
+            
+            draw() {
+                ctx.save();
+                ctx.translate(this.x + this.width/2, this.y + this.height/2);
+                ctx.rotate(this.rotation);
+                
+                // Draw player square
+                ctx.fillStyle = COLOR_PLAYER;
+                ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
+                
+                // Inner highlight / face
+                ctx.fillStyle = '#CFFAFE'; // light cyan
+                ctx.fillRect(-this.width/2 + 4, -this.height/2 + 4, 8, 8);
+                ctx.fillRect(this.width/2 - 12, -this.height/2 + 4, 8, 8);
+                
+                // Neon border effect
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(-this.width/2, -this.height/2, this.width, this.height);
+                
+                ctx.restore();
+            }
+        };
+
+        function handleInput(e) {
+            // Prevent default scrolling for space and arrow keys
+            if(e.type === 'keydown' && (e.code === 'Space' || e.code === 'ArrowUp')) {
+                e.preventDefault();
+            }
+
+            if (currentState === STATE_PLAYING) {
+                if (e.type === 'mousedown' || e.type === 'touchstart' || (e.type === 'keydown' && (e.code === 'Space' || e.code === 'ArrowUp'))) {
+                    player.jump();
+                }
+            }
+        }
+
+        window.addEventListener('keydown', handleInput);
+        canvas.addEventListener('mousedown', handleInput);
+        canvas.addEventListener('touchstart', handleInput, {passive: false});
+
+        uiBtn.addEventListener('click', () => {
+            if (currentState === STATE_MENU || currentState === STATE_GAMEOVER) {
+                startGame();
+            } else if (currentState === STATE_VICTORY) {
+                currentLevelIdx = 0; // restart whole game
+                startGame();
+            }
+        });
+
+        function startGame() {
+            cameraX = 0;
+            attempts = 1;
+            player.reset();
+            particles = [];
+            currentState = STATE_PLAYING;
+            
+            gameUI.classList.add('hidden');
+            gameUI.classList.remove('flex');
+            gameHUD.classList.remove('hidden');
+            
+            updateHUD();
+        }
+
+        function retryLevel() {
+            cameraX = 0;
+            attempts++;
+            player.reset();
+            particles = [];
+            currentState = STATE_PLAYING;
+            updateHUD();
+        }
+
+        function die() {
+            currentState = STATE_GAMEOVER;
+            
+            // Create death particles
+            for(let i=0; i<20; i++) {
+                particles.push({
+                    x: player.x + player.width/2,
+                    y: player.y + player.height/2,
+                    vx: (Math.random() - 0.5) * 10,
+                    vy: (Math.random() - 0.5) * 10,
+                    life: 1.0
+                });
+            }
+            
+            // Short delay then auto-retry (like Geometry Dash)
+            setTimeout(() => {
+                if(currentState === STATE_GAMEOVER) {
+                    retryLevel();
+                }
+            }, 800);
+        }
+
+        function winLevel() {
+            currentState = STATE_VICTORY;
+            
+            if (currentLevelIdx < levels.length - 1) {
+                // Next level setup
+                setTimeout(() => {
+                    currentLevelIdx++;
+                    cameraX = 0;
+                    attempts = 1;
+                    player.reset();
+                    updateHUD();
+                    
+                    // Show interstitial UI
+                    gameUI.classList.remove('hidden');
+                    gameUI.classList.add('flex');
+                    uiTitle.textContent = "LEVEL COMPLETE!";
+                    uiTitle.className = "text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-green-400 to-brand-primary mb-4 drop-shadow-lg";
+                    uiSubtitle.textContent = levels[currentLevelIdx].name;
+                    uiBtn.textContent = "NEXT LEVEL";
+                    gameHUD.classList.add('hidden');
+                }, 1000);
+            } else {
+                // Full game beaten
+                setTimeout(() => {
+                    gameUI.classList.remove('hidden');
+                    gameUI.classList.add('flex');
+                    uiTitle.textContent = "YOU WON!";
+                    uiTitle.className = "text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-yellow-400 to-brand-accent mb-4 drop-shadow-lg";
+                    uiSubtitle.textContent = "You've completed the demo! Map creator coming soon.";
+                    uiBtn.textContent = "PLAY AGAIN";
+                    gameHUD.classList.add('hidden');
+                }, 1000);
+            }
+        }
+
+        function updateHUD() {
+            hudLevel.textContent = levels[currentLevelIdx].name;
+            hudAttempts.textContent = attempts;
+        }
+
+        function drawBackground() {
+            // Fill sky/space
+            ctx.fillStyle = COLOR_BG;
+            ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+            
+            // Draw Grid (Parallax)
+            ctx.strokeStyle = COLOR_GRID;
+            ctx.lineWidth = 1;
+            
+            let gridOffsetX = -(cameraX * 0.5) % 50;
+            
+            ctx.beginPath();
+            // Vertical lines
+            for (let x = gridOffsetX; x < GAME_WIDTH; x += 50) {
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, GAME_HEIGHT);
+            }
+            // Horizontal lines
+            for (let y = 0; y < GAME_HEIGHT; y += 50) {
+                ctx.moveTo(0, y);
+                ctx.lineTo(GAME_WIDTH, y);
+            }
+            ctx.stroke();
+
+            // Draw Ground Floor
+            let floorColor = (currentLevelIdx % 2 === 0) ? COLOR_GROUND : '#0f172a';
+            ctx.fillStyle = floorColor;
+            ctx.fillRect(0, FLOOR_Y, GAME_WIDTH, GROUND_HEIGHT);
+            
+            // Floor border
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, FLOOR_Y);
+            ctx.lineTo(GAME_WIDTH, FLOOR_Y);
+            ctx.stroke();
+        }
+
+        function drawObjects() {
+            let level = levels[currentLevelIdx];
+            
+            for (let obj of level.objects) {
+                let x = obj.x - cameraX;
+                
+                // Only draw visible objects
+                if (x > GAME_WIDTH || x < -TILE_SIZE) continue;
+                
+                let y = obj.y - TILE_SIZE; // Top Y coordinate
+                
+                if (obj.type === 0) {
+                    // SPIKE (Triangle)
+                    ctx.fillStyle = COLOR_SPIKE;
+                    ctx.beginPath();
+                    ctx.moveTo(x + TILE_SIZE/2, y); // Top peak
+                    ctx.lineTo(x + TILE_SIZE, y + TILE_SIZE); // Bottom right
+                    ctx.lineTo(x, y + TILE_SIZE); // Bottom left
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Spike outline
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                } else if (obj.type === 1) {
+                    // BLOCK (Square)
+                    ctx.fillStyle = COLOR_BLOCK;
+                    ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+                    
+                    // Block border
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
+                    
+                    // Inner detail
+                    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+                    ctx.strokeRect(x+4, y+4, TILE_SIZE-8, TILE_SIZE-8);
+                }
+            }
+        }
+        
+        function drawParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= 0.05;
+                
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+                
+                ctx.fillStyle = `rgba(6, 182, 212, ${p.life})`;
+                ctx.fillRect(p.x, p.y, 4, 4);
+            }
+        }
+
+        function gameLoop() {
+            // Update logic
+            if (currentState === STATE_PLAYING) {
+                cameraX += SCROLL_SPEED;
+                
+                player.update();
+                
+                // Update Progress bar
+                let levelLength = levels[currentLevelIdx].length;
+                let progress = Math.min(100, (cameraX / levelLength) * 100);
+                hudProgress.style.width = `${progress}%`;
+                
+                // Win Condition Check
+                if (cameraX >= levelLength) {
+                    winLevel();
+                }
+            }
+
+            // Render logic
+            drawBackground();
+            
+            if (currentState === STATE_PLAYING || currentState === STATE_VICTORY) {
+                drawObjects();
+                player.draw();
+            } else if (currentState === STATE_GAMEOVER) {
+                drawObjects();
+                drawParticles();
+            }
+
+            // Loop
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        // Initialize UI text dynamically based on level config
+        window.onload = function() {
+            uiSubtitle.textContent = levels[0].name;
+            gameLoop(); // Start render loop showing background in menu
+        }
+
+    </script>
+</body>
+</html>
