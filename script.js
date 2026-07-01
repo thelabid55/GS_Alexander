@@ -44,6 +44,9 @@
         let currentState = STATE_MENU;
         let animationFrameId;
         let gameTime = 0; // global tick counter for animations
+        
+        let rickrollPauseTimer = 0;
+        let rickrollAudio = new Audio('./rick-roll-bass-boosted_ZPqkNIT.mp3');
 
         // Colors
         const COLOR_BG = '#0f172a';
@@ -79,6 +82,13 @@
          * 3 = Missile (Horizontal projectile, kills on contact)
          * 4 = Bounce Pad (Launches player high into the air)
          * 5 = Gravity Portal (Flips gravity temporarily — visual obstacle)
+         * 6 = Slowing Trap (Purple mud, slows movement)
+         * 7 = Blue Portal (Entrance)
+         * 8 = Orange Portal (Exit)
+         * 9 = Landmine (Explodes on touch)
+         * 10 = Rickroll Button (Pauses game, plays song)
+         * 11 = Giant Missile (Double size, slower)
+         * 12 = Giant Saw Blade (Double size)
          *
          * For missiles: they use obj._active flag and obj._screenX for runtime tracking.
          * For saws: obj.radius sets size (default TILE_SIZE/2).
@@ -312,16 +322,18 @@
             },
             // ── Level 7: Sticky Situation ─────────────────────────
             {
-                name: "Level 7 - Sticky Situation",
+                name: "Level 7 - Explosive Mud",
                 length: 6000,
                 speed: 7.2,
                 objects: [
                     { x: 500, y: FLOOR_Y, type: 6 },
+                    { x: 520, y: FLOOR_Y, type: 9 }, // Landmine in mud
                     { x: 600, y: FLOOR_Y - 30, type: 3 },
                     { x: 900, y: FLOOR_Y, type: 1 },
                     { x: 940, y: FLOOR_Y, type: 1 },
                     { x: 940, y: FLOOR_Y - 40, type: 1 },
                     { x: 1200, y: FLOOR_Y, type: 6 },
+                    { x: 1220, y: FLOOR_Y, type: 9 }, // Landmine
                     { x: 1240, y: FLOOR_Y, type: 6 },
                     { x: 1300, y: FLOOR_Y, type: 0 },
                     { x: 1340, y: FLOOR_Y, type: 0 },
@@ -329,9 +341,10 @@
                     { x: 1800, y: FLOOR_Y - 70, type: 2 },
                     { x: 2000, y: FLOOR_Y, type: 6 },
                     { x: 2300, y: FLOOR_Y - 50, type: 5 },
-                    { x: 2500, y: FLOOR_Y, type: 0 },
+                    { x: 2500, y: FLOOR_Y, type: 10 }, // Rickroll button!
                     { x: 2540, y: FLOOR_Y, type: 0 },
                     { x: 2700, y: FLOOR_Y, type: 6 },
+                    { x: 2720, y: FLOOR_Y, type: 9 },
                     { x: 2740, y: FLOOR_Y, type: 6 },
                     { x: 3000, y: FLOOR_Y, type: 4 },
                     { x: 3200, y: FLOOR_Y - 30, type: 3 },
@@ -339,6 +352,7 @@
                     { x: 3500, y: FLOOR_Y - 40, type: 1 },
                     { x: 3500, y: FLOOR_Y - 80, type: 2 },
                     { x: 3800, y: FLOOR_Y, type: 6 },
+                    { x: 3840, y: FLOOR_Y, type: 9 }, // Landmine
                     { x: 4100, y: FLOOR_Y, type: 0 },
                     { x: 4140, y: FLOOR_Y, type: 0 },
                     { x: 4180, y: FLOOR_Y, type: 0 },
@@ -350,9 +364,9 @@
                     { x: 5300, y: FLOOR_Y - 50, type: 2 }
                 ]
             },
-            // ── Level 8: Swamp of Doom ────────────────────────────
+            // ── Level 8: Giant Threats ────────────────────────────
             {
-                name: "Level 8 - Swamp of Doom",
+                name: "Level 8 - Giant Threats",
                 length: 6500,
                 speed: 7.5,
                 objects: [
@@ -361,13 +375,11 @@
                     { x: 700, y: FLOOR_Y, type: 0 },
                     { x: 740, y: FLOOR_Y, type: 0 },
                     { x: 1000, y: FLOOR_Y, type: 4 },
-                    { x: 1200, y: FLOOR_Y - 80, type: 1 },
-                    { x: 1240, y: FLOOR_Y - 80, type: 1 },
+                    { x: 1200, y: FLOOR_Y, type: 12 }, // Giant Saw
                     { x: 1500, y: FLOOR_Y, type: 6 },
                     { x: 1540, y: FLOOR_Y, type: 6 },
                     { x: 1580, y: FLOOR_Y, type: 6 },
-                    { x: 1800, y: FLOOR_Y - 20, type: 3 },
-                    { x: 1900, y: FLOOR_Y - 60, type: 3 },
+                    { x: 1800, y: FLOOR_Y - 30, type: 11 }, // Giant Missile
                     { x: 2200, y: FLOOR_Y, type: 4 },
                     { x: 2400, y: FLOOR_Y - 50, type: 5 },
                     { x: 2600, y: FLOOR_Y - 40, type: 2 },
@@ -381,13 +393,13 @@
                     { x: 3440, y: FLOOR_Y, type: 1 },
                     { x: 3700, y: FLOOR_Y, type: 6 },
                     { x: 4000, y: FLOOR_Y, type: 4 },
-                    { x: 4200, y: FLOOR_Y - 60, type: 2 },
+                    { x: 4200, y: FLOOR_Y - 60, type: 12 }, // Giant Saw
                     { x: 4500, y: FLOOR_Y, type: 0 },
                     { x: 4540, y: FLOOR_Y, type: 0 },
                     { x: 4800, y: FLOOR_Y, type: 6 },
                     { x: 4840, y: FLOOR_Y, type: 6 },
                     { x: 4880, y: FLOOR_Y, type: 6 },
-                    { x: 5100, y: FLOOR_Y - 30, type: 3 },
+                    { x: 5100, y: FLOOR_Y - 30, type: 11 }, // Giant Missile
                     { x: 5400, y: FLOOR_Y, type: 4 },
                     { x: 5600, y: FLOOR_Y, type: 0 },
                     { x: 5640, y: FLOOR_Y, type: 0 },
@@ -397,7 +409,7 @@
             },
             // ── Level 9: Precision ────────────────────────────────
             {
-                name: "Level 9 - Precision",
+                name: "Level 9 - Portal Precision",
                 length: 7000,
                 speed: 7.8,
                 objects: [
@@ -410,11 +422,10 @@
                     { x: 1100, y: FLOOR_Y, type: 4 },
                     { x: 1300, y: FLOOR_Y - 100, type: 2 },
                     { x: 1600, y: FLOOR_Y, type: 6 },
-                    { x: 1700, y: FLOOR_Y - 30, type: 3 },
-                    { x: 1900, y: FLOOR_Y, type: 0 },
-                    { x: 1940, y: FLOOR_Y, type: 0 },
-                    { x: 1980, y: FLOOR_Y, type: 0 },
-                    { x: 2200, y: FLOOR_Y - 50, type: 5 },
+                    { x: 1700, y: FLOOR_Y, type: 7 }, // Blue portal
+                    { x: 1800, y: FLOOR_Y, type: 12 }, // Giant Saw blocking path
+                    { x: 2100, y: FLOOR_Y - 100, type: 8 }, // Orange portal high up
+                    { x: 2300, y: FLOOR_Y, type: 10 }, // Rickroll
                     { x: 2400, y: FLOOR_Y - 80, type: 2 },
                     { x: 2700, y: FLOOR_Y, type: 6 },
                     { x: 2740, y: FLOOR_Y, type: 6 },
@@ -424,12 +435,10 @@
                     { x: 3300, y: FLOOR_Y, type: 1 },
                     { x: 3300, y: FLOOR_Y - 40, type: 1 },
                     { x: 3340, y: FLOOR_Y, type: 1 },
-                    { x: 3600, y: FLOOR_Y, type: 0 },
-                    { x: 3640, y: FLOOR_Y, type: 0 },
-                    { x: 3900, y: FLOOR_Y, type: 6 },
-                    { x: 3940, y: FLOOR_Y, type: 6 },
-                    { x: 4200, y: FLOOR_Y - 20, type: 3 },
-                    { x: 4300, y: FLOOR_Y - 60, type: 3 },
+                    { x: 3600, y: FLOOR_Y, type: 7 }, // Blue Portal
+                    { x: 3800, y: FLOOR_Y, type: 12 }, // Blocked by giant saw
+                    { x: 4200, y: FLOOR_Y, type: 8 }, // Exit portal
+                    { x: 4300, y: FLOOR_Y - 40, type: 11 }, // Giant missile
                     { x: 4600, y: FLOOR_Y, type: 4 },
                     { x: 4800, y: FLOOR_Y - 70, type: 2 },
                     { x: 5100, y: FLOOR_Y, type: 6 },
@@ -453,18 +462,17 @@
                     { x: 400, y: FLOOR_Y, type: 0 },
                     { x: 440, y: FLOOR_Y, type: 0 },
                     { x: 700, y: FLOOR_Y, type: 6 },
-                    { x: 740, y: FLOOR_Y, type: 6 },
-                    { x: 800, y: FLOOR_Y - 30, type: 3 },
+                    { x: 740, y: FLOOR_Y, type: 9 }, // Landmine
+                    { x: 800, y: FLOOR_Y - 40, type: 11 }, // Giant Missile
                     { x: 1000, y: FLOOR_Y, type: 4 },
-                    { x: 1200, y: FLOOR_Y - 90, type: 2 },
+                    { x: 1200, y: FLOOR_Y, type: 12 }, // Giant Saw
                     { x: 1400, y: FLOOR_Y, type: 1 },
                     { x: 1400, y: FLOOR_Y - 40, type: 1 },
                     { x: 1440, y: FLOOR_Y, type: 1 },
-                    { x: 1700, y: FLOOR_Y, type: 6 },
-                    { x: 1740, y: FLOOR_Y, type: 6 },
-                    { x: 1780, y: FLOOR_Y, type: 6 },
-                    { x: 2000, y: FLOOR_Y, type: 4 },
-                    { x: 2200, y: FLOOR_Y - 50, type: 5 },
+                    { x: 1700, y: FLOOR_Y, type: 7 }, // Portal Blue
+                    { x: 1900, y: FLOOR_Y, type: 12 }, // Wall of saws
+                    { x: 2100, y: FLOOR_Y - 100, type: 8 }, // Portal Orange
+                    { x: 2300, y: FLOOR_Y, type: 10 }, // Rickroll
                     { x: 2400, y: FLOOR_Y - 80, type: 2 },
                     { x: 2600, y: FLOOR_Y - 40, type: 2 },
                     { x: 2900, y: FLOOR_Y, type: 6 },
@@ -472,7 +480,7 @@
                     { x: 3140, y: FLOOR_Y, type: 0 },
                     { x: 3180, y: FLOOR_Y, type: 0 },
                     { x: 3220, y: FLOOR_Y, type: 0 },
-                    { x: 3500, y: FLOOR_Y - 20, type: 3 },
+                    { x: 3500, y: FLOOR_Y - 20, type: 11 }, // Giant Missile
                     { x: 3600, y: FLOOR_Y - 70, type: 3 },
                     { x: 3800, y: FLOOR_Y, type: 4 },
                     { x: 4000, y: FLOOR_Y - 120, type: 1 },
@@ -481,20 +489,18 @@
                     { x: 4340, y: FLOOR_Y, type: 6 },
                     { x: 4380, y: FLOOR_Y, type: 6 },
                     { x: 4420, y: FLOOR_Y, type: 6 },
-                    { x: 4700, y: FLOOR_Y, type: 0 },
-                    { x: 4740, y: FLOOR_Y, type: 0 },
-                    { x: 4780, y: FLOOR_Y, type: 0 },
-                    { x: 5000, y: FLOOR_Y, type: 4 },
+                    { x: 4700, y: FLOOR_Y, type: 7 }, // Portal Blue
+                    { x: 4900, y: FLOOR_Y, type: 12 }, // Giant Saw
+                    { x: 5000, y: FLOOR_Y - 100, type: 8 }, // Portal Orange
                     { x: 5200, y: FLOOR_Y - 50, type: 5 },
                     { x: 5400, y: FLOOR_Y - 80, type: 2 },
                     { x: 5600, y: FLOOR_Y, type: 6 },
-                    { x: 5640, y: FLOOR_Y, type: 6 },
+                    { x: 5640, y: FLOOR_Y, type: 9 }, // Landmine
                     { x: 5800, y: FLOOR_Y, type: 1 },
                     { x: 5800, y: FLOOR_Y - 40, type: 1 },
                     { x: 5800, y: FLOOR_Y - 80, type: 1 },
-                    { x: 6100, y: FLOOR_Y - 30, type: 3 },
-                    { x: 6200, y: FLOOR_Y - 70, type: 3 },
-                    { x: 6300, y: FLOOR_Y - 30, type: 3 },
+                    { x: 6100, y: FLOOR_Y - 40, type: 11 }, // Giant Missile
+                    { x: 6300, y: FLOOR_Y - 30, type: 11 }, // Giant Missile
                     { x: 6600, y: FLOOR_Y, type: 4 },
                     { x: 6800, y: FLOOR_Y - 100, type: 2 },
                     { x: 7100, y: FLOOR_Y, type: 0 },
@@ -503,6 +509,52 @@
                     { x: 7220, y: FLOOR_Y, type: 0 },
                     { x: 7260, y: FLOOR_Y, type: 0 }
                 ]
+            },
+            // ── Level 11: The Ultimate Level ──────────────────────────
+            {
+                name: "Level 11 - The Ultimate Level",
+                length: 30000,
+                speed: 8.5,
+                objects: (function() {
+                    let objs = [];
+                    // Generate a massive 30,000 unit long level combining everything
+                    for(let x = 600; x < 29000; x += 400) {
+                        let rand = Math.random();
+                        if (rand < 0.15) {
+                            objs.push({x: x, y: FLOOR_Y, type: 0});
+                            objs.push({x: x+40, y: FLOOR_Y, type: 0});
+                        } else if (rand < 0.25) {
+                            objs.push({x: x, y: FLOOR_Y - 40, type: 11}); // Giant Missile
+                        } else if (rand < 0.35) {
+                            objs.push({x: x, y: FLOOR_Y, type: 12}); // Giant Saw
+                        } else if (rand < 0.45) {
+                            objs.push({x: x, y: FLOOR_Y, type: 9}); // Landmine
+                        } else if (rand < 0.55) {
+                            objs.push({x: x, y: FLOOR_Y, type: 4}); // Bounce Pad
+                            objs.push({x: x+200, y: FLOOR_Y - 80, type: 2}); // Saw above
+                        } else if (rand < 0.65) {
+                            objs.push({x: x, y: FLOOR_Y, type: 6}); // Slow trap
+                            objs.push({x: x+40, y: FLOOR_Y, type: 6});
+                            if (Math.random() > 0.5) objs.push({x: x+20, y: FLOOR_Y, type: 9}); // Landmine in mud
+                        } else if (rand < 0.75) {
+                            objs.push({x: x, y: FLOOR_Y, type: 7}); // Blue portal
+                            objs.push({x: x+200, y: FLOOR_Y - 120, type: 8}); // Orange portal
+                            x += 200;
+                        } else if (rand < 0.85) {
+                            objs.push({x: x, y: FLOOR_Y, type: 1}); 
+                            objs.push({x: x, y: FLOOR_Y - 40, type: 1}); 
+                            objs.push({x: x, y: FLOOR_Y - 80, type: 1}); 
+                        } else if (rand < 0.90) {
+                            objs.push({x: x, y: FLOOR_Y - 50, type: 5}); // Gravity portal
+                        } else if (rand < 0.95) {
+                            objs.push({x: x, y: FLOOR_Y, type: 10}); // Rickroll button
+                        } else {
+                            objs.push({x: x, y: FLOOR_Y - 30, type: 3}); // Normal missile
+                            objs.push({x: x+100, y: FLOOR_Y - 60, type: 3}); 
+                        }
+                    }
+                    return objs;
+                })()
             }
         ];
 
@@ -994,15 +1046,98 @@
                             }
                         }
                     }
+                    // ─── NEW TRAPS 7-12 ───
+                    else if (obj.type === 7) {
+                        let portalW = 30;
+                        let portalH = 60;
+                        let px = objScreenX + (TILE_SIZE - portalW) / 2;
+                        let py = obj.y - portalH;
+                        if (pR > px && pL < px + portalW && pB > py && pT < py + portalH) {
+                            if (!obj._used) {
+                                obj._used = true;
+                                let found = false;
+                                for (let p of level.objects) {
+                                    if (p.type === 8 && p.x > obj.x) {
+                                        cameraX = p.x - this.x; 
+                                        this.y = p.y - portalH - this.height; 
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (found) {
+                                    for (let i = 0; i < 20; i++) {
+                                        particles.push({
+                                            x: this.x + this.width / 2, y: this.y + this.height / 2,
+                                            vx: (Math.random() - 0.5) * 10, vy: (Math.random() - 0.5) * 10,
+                                            life: 1.2, color: '#3B82F6'
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (obj.type === 9) {
+                        let mineW = 20;
+                        let mineH = 6;
+                        let mx = objScreenX + (TILE_SIZE - mineW) / 2;
+                        let my = obj.y - mineH;
+                        if (pR > mx && pL < mx + mineW && pB > my && pT < my + mineH) {
+                            playExplosionSound();
+                            for (let p = 0; p < 40; p++) {
+                                particles.push({ x: mx + mineW/2, y: my, vx: (Math.random() - 0.5) * 15, vy: (Math.random() - 0.5) * 15, life: 1.5, color: '#EF4444' });
+                            }
+                            die(); return;
+                        }
+                    }
+                    else if (obj.type === 10) {
+                        let btnW = 24;
+                        let btnH = 8;
+                        let bx = objScreenX + (TILE_SIZE - btnW) / 2;
+                        let by = obj.y - btnH;
+                        if (pR > bx && pL < bx + btnW && pB > by && pT < by + btnH) {
+                            if (!obj._used) {
+                                obj._used = true;
+                                rickrollPauseTimer = 300; 
+                                rickrollAudio.currentTime = 0;
+                                rickrollAudio.play().catch(e => console.log('Audio error:', e));
+                            }
+                        }
+                    }
+                    else if (obj.type === 11) {
+                        if (!obj._fired && objScreenX < GAME_WIDTH + 50 && objScreenX > -200) {
+                            obj._fired = true;
+                            activeMissiles.push({
+                                x: GAME_WIDTH + 20,
+                                y: obj.y,
+                                speed: 6 + currentLevelIdx * 0.4,
+                                life: 400,
+                                isGiant: true
+                            });
+                        }
+                    }
+                    else if (obj.type === 12) {
+                        let sawR = TILE_SIZE * 0.9; 
+                        let cx = objScreenX + TILE_SIZE / 2;
+                        let cy = obj.y - TILE_SIZE; 
+                        let closestX = Math.max(pL, Math.min(cx, pR));
+                        let closestY = Math.max(pT, Math.min(cy, pB));
+                        let dx = cx - closestX;
+                        let dy = cy - closestY;
+                        if (dx * dx + dy * dy < (sawR - 4) * (sawR - 4)) {
+                            die(); return;
+                        }
+                    }
                 }
 
                 // ─── MISSILE COLLISION ───
                 for (let i = 0; i < activeMissiles.length; i++) {
                     let m = activeMissiles[i];
+                    let mWidth = m.isGiant ? 72 : 36;
+                    let mHeight = m.isGiant ? 20 : 10;
                     let mL = m.x;
-                    let mR = m.x + 36;
-                    let mT = m.y - 10;
-                    let mB = m.y + 10;
+                    let mR = m.x + mWidth;
+                    let mT = m.y - mHeight;
+                    let mB = m.y + mHeight;
                     if (this.x + this.width > mL && this.x < mR && nextY + this.height > mT && nextY < mB) {
                         let oldBottom = this.y + this.height;
                         // If falling and was previously above the rocket, bounce!
@@ -1236,7 +1371,7 @@
             } else if (currentState === STATE_VICTORY) {
                 // currentLevelIdx was already advanced by winLevel()
                 // Only reset to 0 if we finished ALL levels ("PLAY AGAIN")
-                if (currentLevelIdx >= levels.length) {
+                if (currentLevelIdx >= levels.length - 1) {
                     currentLevelIdx = 0;
                 }
                 startGame();
@@ -1628,6 +1763,112 @@
                     ctx.stroke();
                     ctx.restore();
                 }
+                // ─── NEW TRAPS 7-12 ───
+                else if (obj.type === 7 || obj.type === 8) { // Portals
+                    let portalW = 30;
+                    let portalH = 60;
+                    let px = x + (TILE_SIZE - portalW) / 2;
+                    let py = obj.y - portalH;
+
+                    ctx.save();
+                    let swirl = gameTime * 0.06;
+                    let alpha = 0.5 + 0.3 * Math.sin(swirl);
+                    let color = obj.type === 7 ? '59, 130, 246' : '249, 115, 22'; // Blue or Orange
+
+                    ctx.shadowColor = `rgb(${color})`;
+                    ctx.shadowBlur = 15 + 5 * Math.sin(swirl);
+
+                    ctx.fillStyle = `rgba(${color}, ${alpha})`;
+                    ctx.beginPath();
+                    ctx.ellipse(px + portalW / 2, py + portalH / 2, portalW / 2, portalH / 2, 0, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.ellipse(px + portalW / 2, py + portalH / 2, portalW / 3, portalH / 3, swirl, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.arc(px + portalW / 2, py + portalH / 2, 3, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.restore();
+                }
+                else if (obj.type === 9) { // Landmine
+                    let mineW = 20;
+                    let mineH = 6;
+                    let mx = x + (TILE_SIZE - mineW) / 2;
+                    let my = obj.y - mineH;
+                    
+                    ctx.fillStyle = '#111827';
+                    ctx.fillRect(mx, my, mineW, mineH);
+                    ctx.fillStyle = '#EF4444'; // Red button
+                    ctx.beginPath();
+                    ctx.arc(mx + mineW/2, my, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                    if (gameTime % 20 < 10) {
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fill();
+                    }
+                }
+                else if (obj.type === 10) { // Rickroll Button
+                    let btnW = 24;
+                    let btnH = 8;
+                    let bx = x + (TILE_SIZE - btnW) / 2;
+                    let by = obj.y - btnH;
+                    
+                    ctx.fillStyle = '#374151';
+                    ctx.fillRect(bx, by, btnW, btnH);
+                    ctx.fillStyle = '#FDE047'; // Yellow top
+                    ctx.fillRect(bx+2, by-2, btnW-4, 2);
+                }
+                else if (obj.type === 11) { // Giant Missile Spawner
+                    let mx = x + TILE_SIZE / 2;
+                    let my = obj.y;
+                    ctx.save();
+                    ctx.globalAlpha = 0.3 + 0.2 * Math.sin(gameTime * 0.15);
+                    ctx.fillStyle = '#DC2626';
+                    ctx.beginPath();
+                    ctx.arc(mx, my, 12, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+                else if (obj.type === 12) { // Giant Saw
+                    let cx = x + TILE_SIZE / 2;
+                    let cy = obj.y - TILE_SIZE; 
+                    let r = TILE_SIZE * 0.9;
+                    let teeth = 12;
+                    let angle = gameTime * -0.06;
+
+                    ctx.save();
+                    ctx.translate(cx, cy);
+                    ctx.rotate(angle);
+
+                    ctx.beginPath();
+                    for (let i = 0; i < teeth * 2; i++) {
+                        let a = (i / (teeth * 2)) * Math.PI * 2;
+                        let rad = (i % 2 === 0) ? r : r * 0.7;
+                        ctx.lineTo(Math.cos(a) * rad, Math.sin(a) * rad);
+                    }
+                    ctx.closePath();
+                    ctx.fillStyle = '#991B1B'; // Darker red
+                    ctx.fill();
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.arc(0, 0, r * 0.2, 0, Math.PI * 2);
+                    ctx.fillStyle = '#1e293b';
+                    ctx.fill();
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+
+                    ctx.restore();
+                }
             }
         }
 
@@ -1635,16 +1876,19 @@
             for (let m of activeMissiles) {
                 let mx = m.x;
                 let my = m.y;
+                let isGiant = m.isGiant;
+                let w = isGiant ? 72 : 36;
+                let h = isGiant ? 20 : 8;
 
                 ctx.save();
                 // Missile body
-                ctx.fillStyle = COLOR_MISSILE;
+                ctx.fillStyle = isGiant ? '#DC2626' : COLOR_MISSILE;
                 ctx.beginPath();
                 ctx.moveTo(mx, my);
-                ctx.lineTo(mx + 36, my);
-                ctx.lineTo(mx + 36, my);
-                ctx.lineTo(mx + 30, my - 8);
-                ctx.lineTo(mx, my - 8);
+                ctx.lineTo(mx + w, my);
+                ctx.lineTo(mx + w, my);
+                ctx.lineTo(mx + w - 6, my - h);
+                ctx.lineTo(mx, my - h);
                 ctx.closePath();
                 ctx.fill();
 
@@ -1652,27 +1896,27 @@
                 ctx.fillStyle = '#ef4444';
                 ctx.beginPath();
                 ctx.moveTo(mx, my);
-                ctx.lineTo(mx - 8, my - 4);
-                ctx.lineTo(mx, my - 8);
+                ctx.lineTo(mx - (isGiant ? 16 : 8), my - h/2);
+                ctx.lineTo(mx, my - h);
                 ctx.closePath();
                 ctx.fill();
 
                 // Exhaust flame
-                let flicker = Math.random() * 6;
+                let flicker = Math.random() * (isGiant ? 12 : 6);
                 ctx.fillStyle = '#fbbf24';
                 ctx.beginPath();
-                ctx.moveTo(mx + 36, my);
-                ctx.lineTo(mx + 42 + flicker, my - 4);
-                ctx.lineTo(mx + 36, my - 8);
+                ctx.moveTo(mx + w, my);
+                ctx.lineTo(mx + w + (isGiant ? 12 : 6) + flicker, my - h/2);
+                ctx.lineTo(mx + w, my - h);
                 ctx.closePath();
                 ctx.fill();
 
                 // Glow
-                ctx.shadowColor = COLOR_MISSILE;
-                ctx.shadowBlur = 10;
+                ctx.shadowColor = isGiant ? '#DC2626' : COLOR_MISSILE;
+                ctx.shadowBlur = isGiant ? 20 : 10;
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 1;
-                ctx.strokeRect(mx, my - 8, 36, 8);
+                ctx.strokeRect(mx, my - h, w, h);
                 ctx.restore();
             }
         }
@@ -1723,31 +1967,35 @@
             if (player.isSlowed) currentSpeed *= 0.35; // major speed reduction in mud
 
             if (currentState === STATE_PLAYING) {
-                cameraX += currentSpeed;
+                if (rickrollPauseTimer > 0) {
+                    rickrollPauseTimer--;
+                } else {
+                    cameraX += currentSpeed;
 
-                player.update();
-                monsterChaser.update();
+                    player.update();
+                    monsterChaser.update();
 
-                // Player trail particles
-                if (gameTime % 3 === 0) {
-                    trailParticles.push({
-                        x: player.x + 2,
-                        y: player.y + player.height / 2 + (Math.random() - 0.5) * 8,
-                        life: 0.8
-                    });
-                }
+                    // Player trail particles
+                    if (gameTime % 3 === 0) {
+                        trailParticles.push({
+                            x: player.x + 2,
+                            y: player.y + player.height / 2 + (Math.random() - 0.5) * 8,
+                            life: 0.8
+                        });
+                    }
 
-                // Update missiles
-                for (let i = activeMissiles.length - 1; i >= 0; i--) {
-                    let m = activeMissiles[i];
-                    m.x -= m.speed;
-                    m.life--;
-                    if (m.x < -60 || m.life <= 0) {
-                        activeMissiles.splice(i, 1);
+                    // Update missiles
+                    for (let i = activeMissiles.length - 1; i >= 0; i--) {
+                        let m = activeMissiles[i];
+                        m.x -= m.speed;
+                        m.life--;
+                        if (m.x < -100 || m.life <= 0) {
+                            activeMissiles.splice(i, 1);
+                        }
                     }
                 }
 
-                // Progress bar
+                // Progress bar (still update visually)
                 let levelLength = levels[currentLevelIdx].length;
                 let progress = Math.min(100, (cameraX / levelLength) * 100);
                 hudProgress.style.width = `${progress}%`;
