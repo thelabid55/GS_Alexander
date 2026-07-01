@@ -1,0 +1,38 @@
+body {
+            background-color: #1E293B;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1E293B;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #A855F7;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06B6D4;
+        }
+
+        /* Game Canvas specific styles */
+        #gameCanvas {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            background-color: #0f172a;
+            image-rendering: pixelated;
+        }
+
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #06B6D4;
+        }
