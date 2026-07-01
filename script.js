@@ -99,7 +99,6 @@
             {
                 name: "Level 1 - First Steps",
                 length: 3000,
-                speed: 5,
                 objects: [
                     // Gentle single spikes with generous spacing
                     { x: 700, y: FLOOR_Y, type: 0 },
@@ -118,7 +117,6 @@
             {
                 name: "Level 2 - Momentum",
                 length: 3800,
-                speed: 5.5,
                 objects: [
                     // Double spike
                     { x: 600, y: FLOOR_Y, type: 0 },
@@ -147,7 +145,6 @@
             {
                 name: "Level 3 - Saw Gauntlet",
                 length: 4500,
-                speed: 5.8,
                 objects: [
                     // Opening spike triple
                     { x: 600, y: FLOOR_Y, type: 0 },
@@ -185,8 +182,7 @@
             // ── Level 4: Missile Madness ──────────────────────────
             {
                 name: "Level 4 - Missile Madness",
-                length: 5200,
-                speed: 6.2,
+                length: 5000,
                 objects: [
                     // Quick spikes to set the tone
                     { x: 500, y: FLOOR_Y, type: 0 },
@@ -229,8 +225,7 @@
             // ── Level 5: The Gauntlet ─────────────────────────────
             {
                 name: "Level 5 - The Gauntlet",
-                length: 6500,
-                speed: 6.8,
+                length: 5500,
                 objects: [
                     // Immediate pressure - triple spike
                     { x: 450, y: FLOOR_Y, type: 0 },
@@ -294,8 +289,7 @@
             // ── Level 6: Muddy Path ───────────────────────────────
             {
                 name: "Level 6 - Muddy Path",
-                length: 5000,
-                speed: 6.8,
+                length: 4000,
                 objects: [
                     { x: 500, y: FLOOR_Y, type: 6 }, // Slowing trap
                     { x: 540, y: FLOOR_Y, type: 6 },
@@ -324,7 +318,6 @@
             {
                 name: "Level 7 - Explosive Mud",
                 length: 6000,
-                speed: 7.2,
                 objects: [
                     { x: 500, y: FLOOR_Y, type: 6 },
                     { x: 520, y: FLOOR_Y, type: 9 }, // Landmine in mud
@@ -368,7 +361,6 @@
             {
                 name: "Level 8 - Giant Threats",
                 length: 6500,
-                speed: 7.5,
                 objects: [
                     { x: 400, y: FLOOR_Y, type: 6 },
                     { x: 440, y: FLOOR_Y, type: 6 },
@@ -411,7 +403,6 @@
             {
                 name: "Level 9 - Portal Precision",
                 length: 7000,
-                speed: 7.8,
                 objects: [
                     { x: 500, y: FLOOR_Y, type: 1 },
                     { x: 500, y: FLOOR_Y - 40, type: 1 },
@@ -457,7 +448,6 @@
             {
                 name: "Level 10 - The Ultimate Escape",
                 length: 8000,
-                speed: 8.2, // Super fast, very stressful
                 objects: [
                     { x: 400, y: FLOOR_Y, type: 0 },
                     { x: 440, y: FLOOR_Y, type: 0 },
